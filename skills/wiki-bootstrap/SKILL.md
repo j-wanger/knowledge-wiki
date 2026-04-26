@@ -1,6 +1,6 @@
 ---
 name: wiki-bootstrap
-description: "Use when seeding a new wiki OR researching specific topics to enrich a mature wiki via online research. Focus-topic mode works at any wiki size; full-domain-gap-analysis mode is best for sparse wikis. Do NOT use when no wiki exists yet (use wiki-init) or for capturing a single insight (use wiki-capture)."
+description: "Use when seeding a new wiki OR researching specific topics to enrich a mature wiki via online research. Focus-topic mode works at any wiki size; full-domain-gap-analysis mode is best for sparse wikis. Do NOT use when no wiki exists yet (use wiki-init) or for capturing a single insight (use wiki-add)."
 writes:
   # Tier 1 — unconditional writes (every bootstrap run)
   - articles/**/*.md                    # creates new wiki articles
@@ -33,7 +33,7 @@ Bootstrap articles are always `tier: public` and `status: draft`. Bootstrap prod
 
 Step 0 below (in the Orchestration Flow) runs FIRST and resolves `wiki_path` — the absolute path to the target wiki. These pre-checks run after Step 0 and use that resolved path.
 
-1. **wiki exists:** Verify `<wiki_path>` is a directory. Step 0 should have caught this, but double-check. If not found: "Wiki path does not exist: <wiki_path>. The registry may be stale. Run `/wiki-list` to see registered wikis." Stop.
+1. **wiki exists:** Verify `<wiki_path>` is a directory. Step 0 should have caught this, but double-check. If not found: "Wiki path does not exist: <wiki_path>. The registry may be stale. Run `/wiki-registry` to see registered wikis." Stop.
 2. **schema.md readable:** Read `<wiki_path>/schema.md`. If missing or unparseable: "schema.md is missing or corrupted at <wiki_path>/schema.md. The wiki may be corrupted." Stop.
 
 No minimum article count gate. Bootstrap works at any wiki size (see Usage Modes below).
@@ -107,7 +107,13 @@ Dispatch via Agent tool:
       description: "wiki-bootstrap -- Analyst phase"
       prompt: [contents of analyst-prompt.md] + [runtime context above]
 
-Receive the analyst's response. It must contain `## Plan`, `## Classifications`, `## Risks`, and `## Research Plan` sections. Read `~/.claude/skills/wiki-bootstrap/analyst-validation-spec.md` for the analyst validation procedure.
+Receive the analyst's response.
+
+**Analyst Validation:** Verify the response contains all four required sections: `## Plan`, `## Classifications`, `## Risks`, `## Research Plan`. If any section is missing, re-dispatch the analyst with: "Your response is missing the following required sections: [list]. Please include all four sections." If the second attempt also fails, proceed with available sections and note the gap in the completion report.
+
+**Handle analyst risks:** If the `## Risks` section lists ambiguities, coverage gaps, or potential overlaps that need clarification, present the risks to the user and ask for guidance. Re-dispatch the analyst with the user's clarifications if needed.
+
+**WebSearch fallback:** If the analyst reports that WebSearch calls failed or were unavailable, note affected topics in the completion report as "seeded from training knowledge — verify for accuracy." Do NOT stop the bootstrap. Proceed with available knowledge and flag articles for manual review.
 
 ### Step 2.5: Research Phase
 

@@ -1,15 +1,14 @@
 # knowledge-wiki
 
-A Claude Code skill suite for managing persistent knowledge bases. Provides a complete CRUD lifecycle for wiki-style knowledge stores: capture insights, ingest external sources, absorb raw entries into polished articles, query across articles, and maintain structural health.
+A Claude Code skill suite for managing persistent knowledge bases. Provides a complete CRUD lifecycle for wiki-style knowledge stores: add insights and external material, absorb raw entries into polished articles, query across articles, and maintain structural health.
 
 ## What it does
 
-- **Capture** decisions, patterns, and lessons from conversations into a structured wiki
-- **Ingest** external files, URLs, and reference material
+- **Add** decisions, patterns, lessons from conversations or external files/URLs into a structured wiki
 - **Absorb** raw inbox entries into polished, cross-linked articles
 - **Query** the wiki for answers using article navigation and synthesis
 - **Bootstrap** new wikis from online research or seed existing ones with new topics
-- **Maintain** wiki health with linting, reorganization, and synthesis
+- **Maintain** wiki health with auditing, staleness detection, and reorganization
 
 ## Skills
 
@@ -17,19 +16,17 @@ A Claude Code skill suite for managing persistent knowledge bases. Provides a co
 |-------|---------|
 | `/knowledge-wiki` | Router — dispatches to the correct sub-skill based on user intent |
 | `/wiki-init` | Bootstrap a new wiki with schema, directory structure, and initial articles |
-| `/wiki-capture` | Save insights from the current conversation to the wiki inbox |
-| `/wiki-ingest` | Import external files or URLs into the wiki inbox |
+| `/wiki-add` | Add to inbox — capture conversation insights or ingest external files/URLs |
 | `/wiki-absorb` | Convert raw inbox entries into polished, cross-linked articles |
 | `/wiki-query` | Answer questions by navigating and synthesizing wiki articles |
 | `/wiki-bootstrap` | Seed a wiki via online research (full gap analysis or focused topics) |
-| `/wiki-lint` | Audit structural health — broken links, orphans, bloat, tag drift |
+| `/wiki-health` | Dashboard metrics, structural audit (13 checks), and staleness marking |
 | `/wiki-reorg` | Restructure categories, fix hierarchy, garden the wiki |
-| `/wiki-synthesize` | Generate new insights by connecting existing articles |
-| `/wiki-status` | Dashboard of articles, cross-links, tags, and recent activity |
 | `/wiki-consolidate` | Convert episodic entries into inbox entries via dedup + fact extraction |
 | `/wiki-index` | Build hybrid search index (FTS5 + vector) for faster wiki-query |
-| `/wiki-list` | List all registered wikis with metadata |
-| `/wiki-rename` | Rename a registered wiki (registry only, no file moves) |
+| `/wiki-registry` | List all registered wikis or rename one |
+
+See `contrib/` for deferred skills (wiki-synthesize).
 
 ## Installation
 
@@ -51,10 +48,11 @@ cp -r skills/* ~/.claude/skills/
 /wiki-init
 
 # Capture an insight from conversation
-/wiki-capture
+/wiki-add
 
 # Import reference material
-/wiki-ingest
+/wiki-add --file docs/reference.md
+/wiki-add --url https://example.com/guide
 
 # Process inbox entries into articles
 /wiki-absorb
@@ -62,8 +60,8 @@ cp -r skills/* ~/.claude/skills/
 # Ask the wiki a question
 /wiki-query
 
-# Check wiki health
-/wiki-lint
+# Check wiki health (dashboard + audit)
+/wiki-health
 
 # Research and add new content
 /wiki-bootstrap
@@ -78,6 +76,7 @@ wiki/
   schema.md          # Domain identity, tags, hierarchy roots
   index.md           # Article index by category and hierarchy
   inbox/             # Raw captures awaiting absorb
+  episodic/          # Append-only session logs and worker outputs
   articles/
     concepts/        # Core domain concepts
     patterns/        # Reusable patterns and techniques
@@ -91,10 +90,11 @@ Register multiple wikis in `~/.claude/wikis.json`. Each wiki is scoped to a proj
 
 ## Package contents
 
-- 14 skill directories (1 router + 13 sub-skills)
-- 56 files, ~5,200 lines
+- 11 skill directories (1 router + 10 sub-skills)
+- ~62 files, ~6,100 lines
 - Hybrid search index (FTS5 + vector) via wiki-index — requires Python 3.11+, uv, fastembed, sqlite-vec, xxhash
 - Consolidation pipeline via wiki-consolidate — converts episodic entries into inbox entries with dedup
+- Three-tier content model (public/private/episodic) with five-state article lifecycle
 
 ## Related
 

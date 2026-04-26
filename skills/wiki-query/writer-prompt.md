@@ -49,7 +49,7 @@ If the wiki does not fully answer the question:
 
 - Every factual claim must cite a source: `Based on [[article-name|Title]]`
 - NEVER fabricate content not present in wiki articles
-- Gaps must be explicitly stated: "The wiki doesn't cover X. Run /wiki-capture to add this."
+- Gaps must be explicitly stated: "The wiki doesn't cover X. Run /wiki-add to add this."
 - When multiple articles contribute, weave into coherent prose (don't summarize each separately)
 - Answer structure: [prose answer] -> Sources: [[a]], [[b]] -> Gaps: [if any]
 
@@ -73,5 +73,5 @@ You are a reader, not a writer. Your only output is the answer text below.
 - [[article-name|Article Title]] -- what this article contributed to the answer
 
 ## Gaps
-- [specific topic or aspect the wiki doesn't cover] -- suggest /wiki-capture to add this
+- [specific topic or aspect the wiki doesn't cover] -- suggest /wiki-add to add this
 - (or "None -- the wiki fully answers this question.")

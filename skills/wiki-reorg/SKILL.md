@@ -1,6 +1,6 @@
 ---
 name: wiki-reorg
-description: "Use when the wiki has structural problems (missing hubs, weak hierarchy, stale organization) and needs gardening. Restructures categories and links. Do NOT use for read-only diagnosis — run wiki-lint first to identify issues before reorganizing."
+description: "Use when the wiki has structural problems (missing hubs, weak hierarchy, stale organization) and needs gardening. Restructures categories and links. Do NOT use for read-only diagnosis — run wiki-health --audit-only first to identify issues before reorganizing."
 ---
 
 # wiki-reorg
@@ -13,10 +13,10 @@ Restructure the project wiki's hierarchy, create hub articles for orphan cluster
 
 Step 0 below (in the Orchestration Flow) runs FIRST and resolves `wiki_path` — the absolute path to the target wiki. These pre-checks run after Step 0 and use that resolved path.
 
-1. **wiki exists:** Verify `<wiki_path>` is a directory. Step 0 should have caught this, but double-check. If not found: "Wiki path does not exist: <wiki_path>. The registry may be stale. Run `/wiki-list` to see registered wikis." Stop.
+1. **wiki exists:** Verify `<wiki_path>` is a directory. Step 0 should have caught this, but double-check. If not found: "Wiki path does not exist: <wiki_path>. The registry may be stale. Run `/wiki-registry` to see registered wikis." Stop.
 2. **schema.md readable:** Read `<wiki_path>/schema.md`. If missing or unparseable: "schema.md is missing or corrupted at <wiki_path>/schema.md. The wiki may be corrupted." Stop.
-3. **Articles exist:** Check that `<wiki_path>/articles/` contains at least one `.md` file in any subdirectory. If empty: "Wiki has no articles yet. Run `/wiki-ingest` to add content, then `/wiki-absorb` to process it." Stop.
-4. **Recommend lint first:** Suggest running `/wiki-lint` first to see current issues. The lint report identifies orphans, bloat, broken links, and tag drift -- useful context for a reorg. If the user has already run lint recently, proceed.
+3. **Articles exist:** Check that `<wiki_path>/articles/` contains at least one `.md` file in any subdirectory. If empty: "Wiki has no articles yet. Run `/wiki-add --file` to add content, then `/wiki-absorb` to process it." Stop.
+4. **Recommend audit first:** Suggest running `/wiki-health --audit-only` first to see current issues. The audit report identifies orphans, bloat, broken links, and tag drift -- useful context for a reorg. If the user has already run an audit recently, proceed.
 
 ---
 
@@ -81,8 +81,7 @@ Report to user:
 - Log entry appended (confirm)
 
 Suggested next steps:
-- "Run `/wiki-lint` to verify the restructured wiki's health."
-- "Run `/wiki-status` to see the updated dashboard."
+- "Run `/wiki-health` to verify the restructured wiki's health and see the dashboard."
 
 ---
 

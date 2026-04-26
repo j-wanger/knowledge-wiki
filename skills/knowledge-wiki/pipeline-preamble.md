@@ -1,5 +1,5 @@
 <!-- Shared preamble for wiki pipeline subagents (writer + reviewer prompts) -->
-<!-- Referenced by: wiki-absorb, wiki-ingest, wiki-bootstrap, wiki-reorg, wiki-synthesize -->
+<!-- Referenced by: wiki-absorb, wiki-add, wiki-bootstrap, wiki-reorg -->
 <!-- SSOT for wiki-path resolution and tool usage conventions -->
 
 ## Wiki Path

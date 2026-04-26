@@ -1,7 +1,7 @@
 <!-- Canonical Step 0 template — 2026-04-08 -->
 <!-- REFERENCE, DO NOT PASTE. Each wiki skill's SKILL.md should link here rather than copy content inline. -->
 <!-- To use this template in a skill: write a short Step 0 section that reads "Read and follow ~/.claude/skills/knowledge-wiki/step-0-template.md. This skill is a [write|read-only] operation — in sub-step 0.6 [update the last_used field | SKIP the touch step]." Then link to this file. -->
-<!-- Sub-step 0.6 (Touch the registry) is write-only. Read-only skills (wiki-query, wiki-lint, wiki-status) follow the SKIP instruction. -->
+<!-- Sub-step 0.6 (Touch the registry) is write-only. Read-only skills (wiki-query, wiki-health in read modes) follow the SKIP instruction. -->
 
 ### Step 0: Resolve Wiki
 
@@ -30,8 +30,8 @@ Read `~/.claude/wikis.json`. Handle these cases:
 
 If the user invoked the command with `--wiki <name>`:
 - Look up the wiki by name in the registry.
-- If not found: STOP. Report: "No wiki named '<name>' is registered. Run `/wiki-list` to see available wikis."
-- If found: verify the path still exists on disk. If not: STOP. Report: "Wiki '<name>' is registered at '<path>' but the directory does not exist. Restore the directory or use /wiki-rename to adjust."
+- If not found: STOP. Report: "No wiki named '<name>' is registered. Run `/wiki-registry` to see available wikis."
+- If found: verify the path still exists on disk. If not: STOP. Report: "Wiki '<name>' is registered at '<path>' but the directory does not exist. Restore the directory or use /wiki-registry rename to adjust."
 - Verify `<path>/schema.md` exists and is readable. If not: STOP. Report: "Wiki '<name>' at '<path>' is missing schema.md. The wiki may be corrupted."
 - If valid: set `wiki_path = <resolved-path>` and skip to Sub-step 0.6.
 
@@ -59,7 +59,7 @@ If CWD contains a `./wiki/` directory with `./wiki/schema.md`, and no registered
         }
 
 5. Use the atomic write pattern (see Sub-step 0.7) to append the entry to the registry.
-6. Emit a one-line notice: `[Auto-registered '<name>' from ./wiki/. Run /wiki-rename to change the name.]`
+6. Emit a one-line notice: `[Auto-registered '<name>' from ./wiki/. Run /wiki-registry rename to change the name.]`
 7. Add the newly registered wiki to the candidate list.
 
 **Sub-step 0.5: Select the wiki**
@@ -67,7 +67,7 @@ If CWD contains a `./wiki/` directory with `./wiki/schema.md`, and no registered
 From the candidate list:
 - If zero candidates:
   - If the registry is empty (no wikis registered at all): STOP. Report: "No wikis are registered. Run `/wiki-init` to create your first wiki, or `/wiki-init --register <path>` to adopt an existing one."
-  - If the registry has wikis but none match CWD: STOP. Report: "No wiki applicable to this directory. Use --wiki <name> or cd into a project with a registered wiki. Run /wiki-list to see available wikis."
+  - If the registry has wikis but none match CWD: STOP. Report: "No wiki applicable to this directory. Use --wiki <name> or cd into a project with a registered wiki. Run /wiki-registry to see available wikis."
 - If exactly one candidate: use it directly. Set `wiki_path = <candidate-path>`.
 - If multiple candidates:
   - Check for a cached inference result from earlier in this conversation. The cache is conversation-scoped only: remember the chosen wiki name within the current Claude conversation. Do not create any file, environment variable, or persistent storage for the cache. If you have already resolved a wiki via inference or user choice in this conversation, reuse that resolution here without re-running inference. **Cache invalidation:** If CWD has changed since the wiki was cached, invalidate the cache and re-resolve from Sub-step 0.3.
@@ -79,9 +79,9 @@ Before proceeding, verify `<wiki_path>/schema.md` exists and is readable. If not
 
 **Sub-step 0.6: Touch the registry (write skills only)**
 
-For write operations (wiki-capture, wiki-ingest, wiki-absorb, wiki-bootstrap, wiki-reorg, wiki-synthesize), update the `last_used` field for the resolved wiki to today's date. Use the atomic write pattern.
+For write operations (wiki-add, wiki-absorb, wiki-bootstrap, wiki-reorg), update the `last_used` field for the resolved wiki to today's date. Use the atomic write pattern.
 
-For read-only skills (wiki-query, wiki-lint, wiki-status), SKIP this sub-step entirely — do not write to the registry on reads.
+For read-only skills (wiki-query, wiki-health in full/audit/dry-run modes), SKIP this sub-step entirely — do not write to the registry on reads.
 
 **Sub-step 0.7: Atomic write pattern**
 

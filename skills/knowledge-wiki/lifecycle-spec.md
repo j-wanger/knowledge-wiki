@@ -31,9 +31,9 @@ draft → reviewed → verified → stale → archived
 |-------|---------------|-----------|
 | wiki-absorb | `reviewed` | Articles pass reviewer subagent during absorb |
 | wiki-bootstrap | `draft` | Bootstrap articles need human review |
-| wiki-capture | `draft` | Quick captures need review before promotion |
-| wiki-ingest | `draft` | Ingested content needs review |
-| wiki-synthesize | `draft` | Synthesized content needs validation |
+| wiki-add (capture) | `draft` | Quick captures need review before promotion |
+| wiki-add (ingest) | `draft` | Ingested content needs review |
+| synthesize (contrib) | `draft` | Synthesized content needs validation |
 | wiki-consolidate | `draft` | Consolidated facts need review |
 | wiki-reorg | Preserves existing status | Reorg restructures, doesn't change lifecycle |
 
@@ -63,5 +63,5 @@ status: draft | reviewed | verified | stale | archived
 
 ## Validation
 
-- wiki-lint check 12 (Status Validity): every article must have `status` field with a valid lifecycle value. Severity: ERROR.
-- wiki-lint check 13 (Staleness Detection): articles with `status: verified` or `reviewed` past their staleness threshold. Severity: WARNING.
+- wiki-health check 12 (Status Validity): every article must have `status` field with a valid lifecycle value. Severity: ERROR.
+- wiki-health check 13 (Staleness Detection): articles with `status: verified` or `reviewed` past their staleness threshold. Severity: WARNING.

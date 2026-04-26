@@ -1,6 +1,6 @@
 ---
 name: wiki-query
-description: "Use when the user asks a domain question that the wiki may already answer. Navigates articles and synthesizes an answer. Read-only. Do NOT use for structural wiki changes (use wiki-reorg) or health audits (use wiki-lint)."
+description: "Use when the user asks a domain question that the wiki may already answer. Navigates articles and synthesizes an answer. Read-only. Do NOT use for structural wiki changes (use wiki-reorg) or health audits (use wiki-health)."
 reads: [<wiki_path>/schema.md, <wiki_path>/index.md, <wiki_path>/articles/**/*.md, $ROOT/.claude/rules/working-knowledge.md]
 writes:
   # Tier 1 — unconditional on successful query
@@ -22,9 +22,9 @@ Answer questions by navigating the project wiki's knowledge base. Strictly read-
 
 Step 0 below (in the Orchestration Flow) runs FIRST and resolves `wiki_path` — the absolute path to the target wiki. These pre-checks run after Step 0 and use that resolved path.
 
-1. **wiki exists:** Verify `<wiki_path>` is a directory. Step 0 should have caught this, but double-check. If not found: "Wiki path does not exist: <wiki_path>. The registry may be stale. Run `/wiki-list` to see registered wikis." Stop.
+1. **wiki exists:** Verify `<wiki_path>` is a directory. Step 0 should have caught this, but double-check. If not found: "Wiki path does not exist: <wiki_path>. The registry may be stale. Run `/wiki-registry` to see registered wikis." Stop.
 2. **schema.md readable:** Read `<wiki_path>/schema.md`. If missing or unparseable: "schema.md is missing or corrupted at <wiki_path>/schema.md. The wiki may be corrupted." Stop.
-3. **Articles exist:** Check that `<wiki_path>/articles/` contains at least one `.md` file (in any subdirectory). If empty or only `.gitkeep` files: "Wiki has no articles yet. Run `/wiki-ingest` or `/wiki-capture` followed by `/wiki-absorb` to build content." Stop.
+3. **Articles exist:** Check that `<wiki_path>/articles/` contains at least one `.md` file (in any subdirectory). If empty or only `.gitkeep` files: "Wiki has no articles yet. Run `/wiki-add` followed by `/wiki-absorb` to build content." Stop.
 
 ---
 
@@ -37,7 +37,7 @@ This skill writes `.claude/rules/working-knowledge.md` (Steps 7a and 8) and `.cl
 - NEVER create new files anywhere in `<wiki_path>/`
 - NEVER write to `~/.claude/wikis.json` (no `last_used` touch on read operations)
 
-If the user's question reveals a gap or error in the wiki, report it in the answer. Do not fix it. The user can use `/wiki-capture` or other write commands to make corrections.
+If the user's question reveals a gap or error in the wiki, report it in the answer. Do not fix it. The user can use `/wiki-add` or other write commands to make corrections.
 
 ---
 
@@ -86,7 +86,15 @@ The question may arrive as:
    ```
    search.py auto-selects hybrid (BM25 + vector) or BM25-only based on available dependencies. If exit code is 0, include the output as a `### Search Results` section in the analyst's Runtime Context. Skip keyword scoring.
 
-2. **Keyword fallback (Tier 3):** If no `.wiki-index.db` exists or search.py exits non-zero, fall back to keyword scoring per `~/.claude/skills/wiki-query/keyword-scoring-spec.md`. Include results as `### Pre-Scored Candidates`.
+2. **Keyword fallback (Tier 3):** If no `.wiki-index.db` exists or search.py exits non-zero, use the following keyword scoring algorithm:
+
+   **Step A — Extract Keywords:** Lowercase the question. Remove stop words (a, an, the, is, are, was, were, of, in, to, for, on, at, by, with, from, as, and, or, but, not, this, that, how, what, which, who, when, where, why, do, does, did, can, could, should, would, will, have, has, had, it, its, i, we, you, they, my, your). Split into words, deduplicate. Keep up to 5 keywords (if more, take the 5 longest).
+
+   **Step B — Grep Frontmatter:** For each keyword, run case-insensitive Grep across `<wiki_path>/articles/` (`glob: "**/*.md"`). Keep only lines starting with `title:`, `aliases:`, or `tags:`. Use parallel Grep calls for all keywords.
+
+   **Step C — Count and Rank:** For each matched article, count distinct keyword matches. Sort descending by count, break ties alphabetically. Take top 10.
+
+   **Step D — Format:** Produce `### Pre-Scored Candidates` block listing articles with matched keywords. If zero matches, omit the section entirely.
 
 If neither search nor keyword scoring returns results, omit both sections entirely — do not include placeholder text.
 
@@ -132,7 +140,7 @@ Present the answer to the user in this format:
 Sources: [[article-a|Article A]], [[article-b|Article B]]
 
 [If gaps exist:]
-Gaps: The wiki doesn't cover [X]. Run /wiki-capture to add this.
+Gaps: The wiki doesn't cover [X]. Run /wiki-add to add this.
 ```
 
 The answer text comes first, written as clear prose. Sources follow immediately after, listing every article that contributed. If gaps were detected, the Gaps line comes last.
@@ -223,8 +231,8 @@ After working-knowledge activation (Step 8) completes — regardless of whether 
 | Error | Response |
 |-------|----------|
 | Agent tool timeout/error | Surface: "[Phase] failed: [error]. Retry with /wiki-query or investigate." Do not retry automatically. |
-| Wiki path not found | "Wiki path does not exist: <wiki_path>. The registry may be stale. Run `/wiki-list` to see registered wikis." STOP. |
-| No articles in wiki | "Wiki has no articles yet. Run `/wiki-ingest` or `/wiki-capture` followed by `/wiki-absorb` to build content." STOP. |
+| Wiki path not found | "Wiki path does not exist: <wiki_path>. The registry may be stale. Run `/wiki-registry` to see registered wikis." STOP. |
+| No articles in wiki | "Wiki has no articles yet. Run `/wiki-add` followed by `/wiki-absorb` to build content." STOP. |
 | Schema missing/corrupt | "schema.md is missing or corrupted at <wiki_path>/schema.md. The wiki may be corrupted." STOP. |
-| Query returns 0 matches | Report gap in answer. Suggest `/wiki-capture` to add missing knowledge. |
+| Query returns 0 matches | Report gap in answer. Suggest `/wiki-add` to add missing knowledge. |
 

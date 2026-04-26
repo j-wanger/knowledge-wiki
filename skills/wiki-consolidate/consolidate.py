@@ -13,35 +13,38 @@ import sys
 from datetime import datetime, timezone
 
 try:
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "wiki-index"))
+    from wikilib import EMBED_MODEL, EMBED_DIM, _HAS_VECTORS, _serialize_f32, parse_frontmatter
+except ImportError:
+    EMBED_MODEL = "nomic-ai/nomic-embed-text-v1.5"
+    EMBED_DIM = 384
+    def _serialize_f32(vec: list[float]) -> bytes:
+        return struct.pack(f"{len(vec)}f", *vec)
+    def parse_frontmatter(text: str) -> dict[str, str]:
+        m = re.match(r"^---\n(.*?)\n---\n?", text, re.DOTALL)
+        if not m:
+            return {}
+        meta = {}
+        for line in m.group(1).splitlines():
+            key, sep, val = line.partition(":")
+            if not sep:
+                continue
+            key = key.strip()
+            val = val.strip().strip("\"'")
+            meta[key] = val
+        return meta
+    try:
+        from fastembed import TextEmbedding
+        import sqlite_vec
+        _HAS_VECTORS = True
+    except ImportError:
+        _HAS_VECTORS = False
+
+if _HAS_VECTORS:
     from fastembed import TextEmbedding
     import sqlite_vec
 
-    _HAS_VECTORS = True
-except ImportError:
-    _HAS_VECTORS = False
-
-EMBED_MODEL = "nomic-ai/nomic-embed-text-v1.5"
-EMBED_DIM = 384
 DEFAULT_THRESHOLD = 0.85
-
-
-def _serialize_f32(vec: list[float]) -> bytes:
-    return struct.pack(f"{len(vec)}f", *vec)
-
-
-def parse_frontmatter(text: str) -> dict[str, str]:
-    m = re.match(r"^---\n(.*?)\n---\n?", text, re.DOTALL)
-    if not m:
-        return {}
-    meta = {}
-    for line in m.group(1).splitlines():
-        key, sep, val = line.partition(":")
-        if not sep:
-            continue
-        key = key.strip()
-        val = val.strip().strip("\"'")
-        meta[key] = val
-    return meta
 
 
 def parse_tags(text: str) -> list[str]:

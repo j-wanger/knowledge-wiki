@@ -1,6 +1,6 @@
 ---
 name: wiki-absorb
-description: "Use when the wiki inbox has 3+ unprocessed entries or before running query/lint/reorg. Converts raw captures into polished cross-linked articles. Do NOT use for capturing new insights (use wiki-capture) or when the inbox is empty."
+description: "Use when the wiki inbox has 3+ unprocessed entries or before running query/lint/reorg. Converts raw captures into polished cross-linked articles. Do NOT use for capturing new insights (use wiki-add) or when the inbox is empty."
 ---
 
 # wiki-absorb
@@ -13,9 +13,9 @@ Process all raw entries in `<wiki_path>/inbox/` into polished, cross-linked, tag
 
 Step 0 below (in the Orchestration Flow) runs FIRST and resolves `wiki_path` — the absolute path to the target wiki. These pre-checks run after Step 0 and use that resolved path.
 
-1. **wiki exists:** Verify `<wiki_path>` is a directory. Step 0 should have caught this, but double-check. If not found: "Wiki path does not exist: <wiki_path>. The registry may be stale. Run `/wiki-list` to see registered wikis." Stop.
+1. **wiki exists:** Verify `<wiki_path>` is a directory. Step 0 should have caught this, but double-check. If not found: "Wiki path does not exist: <wiki_path>. The registry may be stale. Run `/wiki-registry` to see registered wikis." Stop.
 2. **schema.md readable:** Read `<wiki_path>/schema.md`. If missing or unparseable: "schema.md is missing or corrupted at <wiki_path>/schema.md. The wiki may be corrupted." Stop.
-3. **Inbox has entries:** Check that `<wiki_path>/inbox/` contains at least one `.md` file that is not `.gitkeep` and is not inside `.processed/`. If the inbox is empty: "Inbox is empty -- nothing to absorb. Use `/wiki-ingest` or `/wiki-capture` to add entries." Stop.
+3. **Inbox has entries:** Check that `<wiki_path>/inbox/` contains at least one `.md` file that is not `.gitkeep` and is not inside `.processed/`. If the inbox is empty: "Inbox is empty -- nothing to absorb. Use `/wiki-add` to add entries." Stop.
 
 ---
 

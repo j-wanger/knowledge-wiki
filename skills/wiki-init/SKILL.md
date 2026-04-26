@@ -37,7 +37,7 @@ Ask ONE question at a time. Wait for the user's answer before proceeding to the 
 Keep the tone conversational, not interrogative -- this should feel like a quick onboarding chat, not a bureaucratic form.
 
 **Q1: Wiki Name**
-> What should we call this wiki? This is the name you'll use with `/wiki-list` and `--wiki <name>`.
+> What should we call this wiki? This is the name you'll use with `/wiki-registry` and `--wiki <name>`.
 > *(default: derived from the target directory name, e.g., "knowledge-wiki" for /Users/x/knowledge-wiki/)*
 
 The name must be kebab-case (lowercase letters, digits, hyphens). If the user provides invalid characters, normalize or ask again. Reject leading/trailing hyphens and consecutive hyphens.
@@ -50,7 +50,7 @@ Verify the name is not already in the registry at `~/.claude/wikis.json` (if the
 
 Accept any absolute or relative path. Resolve to canonical absolute path (use Bash `realpath` on the parent directory, since the target may not exist yet; then append the basename).
 
-Verify the resolved path is not already registered. If it is: "A wiki is already registered at this path: [existing-name]. Choose a different path or use /wiki-rename to change its name." Re-ask or abort.
+Verify the resolved path is not already registered. If it is: "A wiki is already registered at this path: [existing-name]. Choose a different path or use /wiki-registry rename to change its name." Re-ask or abort.
 
 Verify the path does not already contain a `schema.md` (that would indicate an existing wiki that should use `/wiki-init --register` instead). If it does: "A wiki already exists at [path]. Use `/wiki-init --register [path]` to register it instead of creating a new one." Abort.
 
@@ -109,13 +109,13 @@ These become the initial hierarchy roots in schema.md.
 > Any source materials ready to ingest now? File paths, URLs, or directories you'd like to feed in?
 > *(optional -- you can skip this and ingest later)*
 
-If the user provides paths, do NOT ingest them during init. Record them for a reminder to run `/wiki-ingest` after initialization.
+If the user provides paths, do NOT ingest them during init. Record them for a reminder to run `/wiki-add --file` after initialization.
 
 **Q9: Staleness Thresholds (optional)**
 > How quickly does knowledge in this domain go stale? You can set a default threshold and per-tag overrides.
 > *(default: 180 days. Fast-moving domains like sanctions/regulations may need 30-90 days. Stable domains like methodologies may use 365 days.)*
 
-If the user provides thresholds, record them as `staleness_rules` in schema.md. If skipped, use the default (180 days, no overrides). This enables lifecycle-spec.md staleness detection (wiki-lint check 13). See `tier-spec.md` and `lifecycle-spec.md` for the tier and lifecycle models that staleness feeds into.
+If the user provides thresholds, record them as `staleness_rules` in schema.md. If skipped, use the default (180 days, no overrides). This enables lifecycle-spec.md staleness detection (wiki-health check 13). See `tier-spec.md` and `lifecycle-spec.md` for the tier and lifecycle models that staleness feeds into.
 
 Example overrides the user might specify:
 - "sanctions lists should be checked monthly" → `{tags: [sanctions], days: 30}`
@@ -180,7 +180,7 @@ The registry append happens AFTER the writer/reviewer cycle succeeds. If the sca
 
 ### Step 8: Completion report
 
-Report: files created, domain/audience/roots from schema, registry confirmation. Suggest `/wiki-bootstrap` for new wikis, `/wiki-ingest <paths>` if source materials provided.
+Report: files created, domain/audience/roots from schema, registry confirmation. Suggest `/wiki-bootstrap` for new wikis, `/wiki-add --file <paths>` if source materials provided.
 
 ---
 

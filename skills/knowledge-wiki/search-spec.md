@@ -133,7 +133,7 @@ Wiki-query Step 1 uses this fallback chain (first available wins):
 |------|-----------|---------------|
 | 1 | `.wiki-index.db` exists + fastembed available | Full hybrid (BM25 + vector + RRF) |
 | 2 | `.wiki-index.db` exists, no fastembed | BM25-only via search.py --bm25-only |
-| 3 | No `.wiki-index.db` | Keyword scoring via keyword-scoring-spec.md |
+| 3 | No `.wiki-index.db` | Keyword scoring (inlined in wiki-query/SKILL.md Step 1) |
 
 ## Ground-Truth Test Format
 

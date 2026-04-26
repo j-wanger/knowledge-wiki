@@ -1,6 +1,6 @@
 ---
 name: wiki-consolidate
-description: "Use when episodic/ has 5+ unconsolidated entries. Converts raw episodic findings into staged inbox entries via dedup + fact extraction. Do NOT use for capturing new insights (use wiki-capture) or for processing inbox entries (use wiki-absorb)."
+description: "Use when episodic/ has 5+ unconsolidated entries. Converts raw episodic findings into staged inbox entries via dedup + fact extraction. Do NOT use for capturing new insights (use wiki-add) or for processing inbox entries (use wiki-absorb)."
 ---
 
 # wiki-consolidate
@@ -15,7 +15,7 @@ Pipeline: `episodic/ -> scan -> manifest -> Analyst -> Writer -> Reviewer -> inb
 
 Step 0 below (in the Orchestration Flow) runs FIRST and resolves `wiki_path` -- the absolute path to the target wiki. These pre-checks run after Step 0 and use that resolved path.
 
-1. **Wiki exists:** Verify `<wiki_path>` is a directory. Step 0 should have caught this, but double-check. If not found: "Wiki path does not exist: <wiki_path>. The registry may be stale. Run `/wiki-list` to see registered wikis." Stop.
+1. **Wiki exists:** Verify `<wiki_path>` is a directory. Step 0 should have caught this, but double-check. If not found: "Wiki path does not exist: <wiki_path>. The registry may be stale. Run `/wiki-registry` to see registered wikis." Stop.
 2. **Episodic directory exists:** Check that `<wiki_path>/episodic/` exists and is a directory. If missing: "No episodic/ directory found at <wiki_path>. Nothing to consolidate." Stop.
 3. **Unconsolidated entries present:** Check for `.md` files in `<wiki_path>/episodic/` that are not listed in `<wiki_path>/episodic/.consolidated`. If all entries are already processed: "All episodic entries already consolidated. Nothing to do." Stop.
 4. **Search index recommended:** Check that `<wiki_path>/.wiki-index.db` exists. If missing: warn "No search index found. Dedup will be skipped -- all entries classified as candidates. Run `/wiki-index build` first for dedup support." Continue (do not block).

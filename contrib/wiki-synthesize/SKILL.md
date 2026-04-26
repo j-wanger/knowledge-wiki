@@ -13,9 +13,9 @@ Generate new insight articles by finding connections, gaps, contradictions, and 
 
 Step 0 below (in the Orchestration Flow) runs FIRST and resolves `wiki_path` — the absolute path to the target wiki. These pre-checks run after Step 0 and use that resolved path.
 
-1. **wiki exists:** Verify `<wiki_path>` is a directory. Step 0 should have caught this, but double-check. If not found: "Wiki path does not exist: <wiki_path>. The registry may be stale. Run `/wiki-list` to see registered wikis." Stop.
+1. **wiki exists:** Verify `<wiki_path>` is a directory. Step 0 should have caught this, but double-check. If not found: "Wiki path does not exist: <wiki_path>. The registry may be stale. Run `/wiki-registry` to see registered wikis." Stop.
 2. **schema.md readable:** Read `<wiki_path>/schema.md`. If missing or unparseable: "schema.md is missing or corrupted at <wiki_path>/schema.md. The wiki may be corrupted." Stop.
-3. **At least 5 articles:** Count all `.md` files under `<wiki_path>/articles/` (recursively, excluding `.gitkeep`). If fewer than 5 articles exist: "Wiki has N articles -- need at least 5 for meaningful synthesis. Keep building with `/wiki-capture` and `/wiki-ingest`." Stop. Synthesis needs enough material to find cross-cutting themes.
+3. **At least 5 articles:** Count all `.md` files under `<wiki_path>/articles/` (recursively, excluding `.gitkeep`). If fewer than 5 articles exist: "Wiki has N articles -- need at least 5 for meaningful synthesis. Keep building with `/wiki-add`." Stop. Synthesis needs enough material to find cross-cutting themes.
 
 ---
 

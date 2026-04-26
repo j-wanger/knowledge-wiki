@@ -5,25 +5,18 @@ from __future__ import annotations
 
 import argparse
 import os
-import re
 import sqlite3
-import struct
 import sys
 import time
 from dataclasses import dataclass
 
 import xxhash
 
-try:
+from wikilib import EMBED_MODEL, EMBED_DIM, _HAS_VECTORS, _serialize_f32, parse_frontmatter
+
+if _HAS_VECTORS:
     from fastembed import TextEmbedding
     import sqlite_vec
-
-    _HAS_VECTORS = True
-except ImportError:
-    _HAS_VECTORS = False
-
-EMBED_MODEL = "nomic-ai/nomic-embed-text-v1.5"
-EMBED_DIM = 384
 
 
 # --- Article parsing layer ---
@@ -38,21 +31,6 @@ class Article:
     content_hash: str
     tier: str | None
     updated_at: str
-
-
-def parse_frontmatter(text: str) -> dict[str, str]:
-    m = re.match(r"^---\n(.*?)\n---\n?", text, re.DOTALL)
-    if not m:
-        return {}
-    meta = {}
-    for line in m.group(1).splitlines():
-        key, sep, val = line.partition(":")
-        if not sep:
-            continue
-        key = key.strip()
-        val = val.strip().strip("\"'")
-        meta[key] = val
-    return meta
 
 
 def parse_article(fpath: str, wiki_path: str) -> Article:
@@ -137,10 +115,6 @@ CREATE VIRTUAL TABLE IF NOT EXISTS articles_vec USING vec0(
     embedding float[{EMBED_DIM}]
 );
 """
-
-
-def _serialize_f32(vec: list[float]) -> bytes:
-    return struct.pack(f"{len(vec)}f", *vec)
 
 
 def init_db(db_path: str, rebuild: bool = False, use_vectors: bool = False) -> sqlite3.Connection:

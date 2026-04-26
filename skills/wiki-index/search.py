@@ -7,23 +7,13 @@ import argparse
 import os
 import re
 import sqlite3
-import struct
 import sys
 
-try:
+from wikilib import EMBED_MODEL, EMBED_DIM, _HAS_VECTORS, _serialize_f32
+
+if _HAS_VECTORS:
     from fastembed import TextEmbedding
     import sqlite_vec
-
-    _HAS_VECTORS = True
-except ImportError:
-    _HAS_VECTORS = False
-
-EMBED_MODEL = "nomic-ai/nomic-embed-text-v1.5"
-EMBED_DIM = 384
-
-
-def _serialize_f32(vec: list[float]) -> bytes:
-    return struct.pack(f"{len(vec)}f", *vec)
 
 
 def _sanitize_fts(query: str) -> str:

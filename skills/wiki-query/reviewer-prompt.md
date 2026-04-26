@@ -35,7 +35,7 @@ Read the actual wiki articles cited in the answer. Verify every claim independen
 ### 3. Gap Handling
 - If the wiki does not fully answer the question, are the gaps explicitly stated?
 - Are gaps precise? "The wiki doesn't cover X" is good. Silently omitting a topic is bad.
-- Does the answer suggest `/wiki-capture` for filling gaps?
+- Does the answer suggest `/wiki-add` for filling gaps?
 - Did the writer gloss over missing information by hedging ("this is likely..." or "it probably...") instead of flagging the gap?
 
 ### 4. Answer Coherence
@@ -55,7 +55,7 @@ These conventions must be met for an answer to pass review:
 
 - Every factual claim must cite a source: `Based on [[article-name|Title]]`
 - NEVER fabricate content not present in wiki articles
-- Gaps must be explicitly stated: "The wiki doesn't cover X. Run /wiki-capture to add this."
+- Gaps must be explicitly stated: "The wiki doesn't cover X. Run /wiki-add to add this."
 - When multiple articles contribute, weave into coherent prose (don't summarize each separately)
 - Answer structure: [prose answer] -> Sources: [[a]], [[b]] -> Gaps: [if any]
 

@@ -1,6 +1,6 @@
 <!-- Canonical reviewer checklist -- 2026-04-10 -->
 <!-- REFERENCE, DO NOT PASTE. Each reviewer-prompt.md should link here for the 9 standard checks. -->
-<!-- Skills that use this checklist: wiki-bootstrap, wiki-absorb, wiki-reorg, wiki-synthesize, wiki-capture (partial -- capture only uses format compliance subset) -->
+<!-- Skills that use this checklist: wiki-bootstrap, wiki-absorb, wiki-reorg, wiki-add (partial -- capture mode only uses format compliance subset) -->
 
 # Standard Reviewer Validation Checks
 

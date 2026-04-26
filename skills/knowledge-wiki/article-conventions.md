@@ -1,6 +1,6 @@
 <!-- Canonical article conventions — 2026-04-08 -->
-<!-- REFERENCE, DO NOT PASTE. Writer prompts in wiki-absorb, wiki-bootstrap, wiki-reorg, wiki-synthesize should link here rather than copy content inline. -->
-<!-- Also referenced by wiki-lint and wiki-status for their convention-check sections. -->
+<!-- REFERENCE, DO NOT PASTE. Writer prompts in wiki-absorb, wiki-bootstrap, wiki-reorg should link here rather than copy content inline. -->
+<!-- Also referenced by wiki-health for its convention-check sections. -->
 
 # Wiki Article Conventions
 
@@ -87,7 +87,7 @@ Set the `source` field based on the inbox entry's `source_type` frontmatter:
 - `source_type: paste` maps to `source: ingest`
 - `source_type: session` maps to `source: session`
 
-For articles created by wiki-synthesize, use `source: synthesize`. For articles created by wiki-bootstrap, use `source: bootstrap` (generated from domain knowledge to seed the wiki — distinct from `ingest` which is imported from user-provided files/URLs).
+For synthesized articles, use `source: synthesize`. For articles created by wiki-bootstrap, use `source: bootstrap` (generated from domain knowledge to seed the wiki — distinct from `ingest` which is imported from user-provided files/URLs).
 
 ## Linking Rules
 

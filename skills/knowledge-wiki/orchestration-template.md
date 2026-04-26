@@ -1,6 +1,6 @@
 <!-- Canonical orchestration template -- 2026-04-10 -->
 <!-- REFERENCE, DO NOT PASTE. Each wiki skill's SKILL.md should link here rather than copy the pipeline inline. -->
-<!-- Skills that use this template: wiki-bootstrap, wiki-capture, wiki-ingest, wiki-absorb, wiki-query, wiki-reorg, wiki-synthesize, wiki-init -->
+<!-- Skills that use this template: wiki-bootstrap, wiki-add, wiki-absorb, wiki-query, wiki-reorg, wiki-init -->
 
 # Orchestration Template: Analyst -> Writer -> Reviewer Pipeline
 
@@ -60,9 +60,9 @@ Agent tool:
 
 Some skills require explicit user approval before dispatching the writer. The skill's SKILL.md specifies whether this gate applies and what format to use.
 
-- **Skills with approval gate:** wiki-bootstrap, wiki-reorg, wiki-synthesize
-- **Skills without approval gate:** wiki-absorb, wiki-ingest, wiki-init, wiki-query
-- **Skills with conditional gate:** wiki-capture (Mode B only)
+- **Skills with approval gate:** wiki-bootstrap, wiki-reorg
+- **Skills without approval gate:** wiki-absorb, wiki-add (ingest modes), wiki-init, wiki-query
+- **Skills with conditional gate:** wiki-add (capture-identify mode only)
 
 When the gate applies, present the analyst's plan to the user grouped by hierarchy root or numbered by change. Wait for the user's response before proceeding. If the user rejects, stop gracefully.
 
@@ -94,7 +94,7 @@ Agent tool:
 1. Read `reviewer-prompt.md` from the skill's own directory.
 2. Append the analyst's plan under `## Analyst Plan`.
 3. Append the writer's report (combined across all batches if applicable) under `## Writer Report`.
-4. Append any additional context the skill requires (e.g., original source material for wiki-ingest, index content for wiki-query).
+4. Append any additional context the skill requires (e.g., original source material for wiki-add ingest modes, index content for wiki-query).
 
 ```
 Agent tool:

@@ -40,7 +40,7 @@ The global wiki registry. A single JSON file that maps wiki names to absolute pa
 
 ## Staleness Rules (Optional)
 
-When present in a wiki entry, `staleness_rules` configures per-wiki staleness thresholds for wiki-lint check 13 (see `lifecycle-spec.md` for the state machine):
+When present in a wiki entry, `staleness_rules` configures per-wiki staleness thresholds for wiki-health check 13 (see `lifecycle-spec.md` for the state machine):
 
 ```json
 {
@@ -84,7 +84,7 @@ When present, `consolidation` configures the dedup pipeline for `wiki-consolidat
 
 - Created lazily: the file does not exist until the first wiki is registered.
 - All mutations use the atomic rename pattern: write `.tmp`, then `mv` to final path.
-- Read-only skills (wiki-query, wiki-lint, wiki-status) do not mutate the registry.
+- Read-only skills (wiki-query, wiki-health in read modes) do not mutate the registry.
 - Corrupted files are never auto-repaired — users must back up and delete manually.
 
 ## Canonical Path

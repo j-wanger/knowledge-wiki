@@ -1,3 +1,4 @@
 .wiki-index.db
 .dev-wiki/
 .claude/
+__pycache__/
