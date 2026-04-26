@@ -117,6 +117,20 @@ The inbox is a staging area. All structuring, linking, and index updates happen 
 
 ---
 
+## Tier Assignment
+
+Inbox entries created by ingest carry a tier hint based on source type. See `tier-spec.md` for canonical tier definitions.
+
+| Source Type | Default Tier | Rationale |
+|------------|-------------|-----------|
+| `file` (external docs, references) | `public` | External reference material is typically factual |
+| `url` (web content) | `public` | Published web content is citable |
+| `paste` (inline text) | `private` | Pasted notes may be personal analysis |
+
+The user may override by specifying `--tier public` or `--tier private`. The tier hint is stored in the inbox entry frontmatter for absorb to use. Final tier assignment happens during absorb (see `tier-spec.md` for assignment rules).
+
+---
+
 ## Error Handling
 
 If any Agent tool call fails (timeout, error), surface the error to the user:

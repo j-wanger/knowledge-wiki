@@ -35,6 +35,44 @@ The global wiki registry. A single JSON file that maps wiki names to absolute pa
 | description | string | yes | Human-readable summary for inference matching. May be empty string. |
 | registered | string | yes | ISO date (YYYY-MM-DD) of registration. |
 | last_used | string | yes | ISO date of last successful write operation. Read-only ops do not update this. |
+| staleness_rules | object | no | Domain-configurable staleness thresholds. See below. |
+| consolidation | object | no | Consolidation pipeline configuration. See below. |
+
+## Staleness Rules (Optional)
+
+When present in a wiki entry, `staleness_rules` configures per-wiki staleness thresholds for wiki-lint check 13 (see `lifecycle-spec.md` for the state machine):
+
+```json
+{
+  "staleness_rules": {
+    "default_days": 180,
+    "overrides": [
+      { "tags": ["sanctions", "pep-lists"], "days": 30 },
+      { "tags": ["regulations", "directives"], "days": 90 },
+      { "tags": ["typologies", "methodologies"], "days": 365 }
+    ]
+  }
+}
+```
+
+- `default_days` (integer, required if block present): fallback threshold for articles with no tag-specific override.
+- `overrides` (array, optional): tag-specific thresholds. Tag-specific overrides take precedence over `default_days`. If an article matches multiple overrides, the shortest (most aggressive) threshold wins.
+
+These thresholds are also stored in the wiki's own `schema.md` (authoritative). The registry copy is for quick access by skills that need thresholds without reading schema.md.
+
+## Consolidation Config (Optional)
+
+When present, `consolidation` configures the dedup pipeline for `wiki-consolidate`:
+
+```json
+{
+  "consolidation": {
+    "dedup_cosine_threshold": 0.85
+  }
+}
+```
+
+- `dedup_cosine_threshold` (float, default 0.85): cosine similarity threshold for flagging potential duplicates during consolidation. Domain-dependent — AML regulatory text may need 0.80 (formulaic language inflates similarity), ML research may use 0.90 (more semantically diverse).
 
 ## Invariants
 

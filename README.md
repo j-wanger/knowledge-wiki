@@ -26,6 +26,8 @@ A Claude Code skill suite for managing persistent knowledge bases. Provides a co
 | `/wiki-reorg` | Restructure categories, fix hierarchy, garden the wiki |
 | `/wiki-synthesize` | Generate new insights by connecting existing articles |
 | `/wiki-status` | Dashboard of articles, cross-links, tags, and recent activity |
+| `/wiki-consolidate` | Convert episodic entries into inbox entries via dedup + fact extraction |
+| `/wiki-index` | Build hybrid search index (FTS5 + vector) for faster wiki-query |
 | `/wiki-list` | List all registered wikis with metadata |
 | `/wiki-rename` | Rename a registered wiki (registry only, no file moves) |
 
@@ -89,9 +91,10 @@ Register multiple wikis in `~/.claude/wikis.json`. Each wiki is scoped to a proj
 
 ## Package contents
 
-- 13 skill directories (1 router + 12 sub-skills)
-- 50 files, ~4,750 lines
-- All declarative Markdown — no compiled code or external dependencies
+- 14 skill directories (1 router + 13 sub-skills)
+- 56 files, ~5,200 lines
+- Hybrid search index (FTS5 + vector) via wiki-index — requires Python 3.11+, uv, fastembed, sqlite-vec, xxhash
+- Consolidation pipeline via wiki-consolidate — converts episodic entries into inbox entries with dedup
 
 ## Related
 

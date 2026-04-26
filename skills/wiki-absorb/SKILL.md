@@ -117,6 +117,14 @@ If multiple batches were processed, include a summary across all batches.
 
 ---
 
+## Tier and Lifecycle Assignment
+
+Every article created or updated by absorb must include `tier` and `status` frontmatter fields. See `tier-spec.md` for canonical tier definitions and `lifecycle-spec.md` for the lifecycle state machine.
+
+- **Tier:** The analyst classifies each entry as `public` (domain facts — verifiable, citable) or `private` (personal analysis — subjective assessments, decisions without external validation). The classification is based on content, not source. If the inbox entry's `source_type` is `session`, default to `private` unless the content is clearly factual. For `file`, `url`, or `paste` sources, default to `public`.
+- **Status:** Articles produced by absorb are set to `status: reviewed` (they pass the reviewer subagent as part of the absorb pipeline). Articles flagged with AMBER or RED claims by the verifier are set to `status: draft` instead.
+- **Existing articles:** When updating an existing article, preserve its current `tier` and `status` unless the new content changes the classification. If the update adds unverified claims, downgrade `status` to `draft`.
+
 ## Scope Boundary
 
 NEVER write to `inbox/` (except moving files to `inbox/.processed/`). NEVER modify `schema.md` directly — propose changes only via `## Proposed Changes` section. All article writes go to `articles/` and its subdirectories only.

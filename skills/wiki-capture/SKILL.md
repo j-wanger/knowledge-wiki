@@ -73,6 +73,14 @@ Report to user:
 
 ---
 
+## Tier and Lifecycle
+
+Inbox entries created by capture carry `tier: private` by default (session captures are personal analysis). The user may override by specifying a tier in their invocation (e.g., `/wiki-capture --tier public <text>`). See `tier-spec.md` for canonical tier definitions.
+
+Status is not set at capture time — it is assigned during absorb (see `lifecycle-spec.md`). The inbox entry's `source_type: session` signals to absorb that `private` is the default tier.
+
+---
+
 ## Error Handling
 
 If any Agent tool call fails (timeout, error), surface the error to the user:

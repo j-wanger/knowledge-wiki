@@ -25,6 +25,8 @@ Every article under `<wiki_path>/articles/` is a Markdown file with YAML frontma
 - `created` -- creation date (YYYY-MM-DD)
 - `updated` -- last update date (YYYY-MM-DD)
 - `source` -- origin of the content (string)
+- `tier` -- `public` or `private` (see `tier-spec.md`)
+- `status` -- lifecycle state (see `lifecycle-spec.md`)
 
 ### Linking Rules
 
@@ -110,9 +112,9 @@ Severity: **INFO**
 
 ### 7. Frontmatter Issues
 
-Every article must have all required frontmatter fields: `title`, `aliases`, `category`, `tags`, `parents`, `created`, `updated`, `source`. Check each article for:
+Every article must have all required frontmatter fields: `title`, `aliases`, `category`, `tags`, `parents`, `created`, `updated`, `source`, `tier`, `status`. Check each article for:
 
-- Missing required fields
+- Missing required fields (tier and status are validated in detail by checks 11 and 12; this check catches their absence alongside other fields)
 - Invalid `category` values (must be one of: `concepts`, `patterns`, `decisions`, `action-plans`)
 
 Severity: **ERROR**
@@ -151,6 +153,41 @@ Scan all article titles and aliases for potential overlaps. Flag pairs of articl
 These may indicate duplicate coverage of the same topic.
 
 Severity: **INFO**
+
+### 11. Tier Validity
+
+Every article under `<wiki_path>/articles/` must have a `tier` field in its YAML frontmatter with a value of exactly `public` or `private`. See `tier-spec.md` for canonical tier definitions.
+
+- Missing `tier` field: flag the article
+- Invalid value (anything other than `public` or `private`): flag the article
+
+Episodic entries (files under `<wiki_path>/episodic/`) are NOT articles and are exempt from this check. See `episodic-conventions.md` for their separate conventions.
+
+Severity: **ERROR**
+
+### 12. Status Validity
+
+Every article under `<wiki_path>/articles/` must have a `status` field in its YAML frontmatter with one of: `draft`, `reviewed`, `verified`, `stale`, `archived`. See `lifecycle-spec.md` for the canonical lifecycle state machine.
+
+- Missing `status` field: flag the article
+- Invalid value: flag the article
+
+Severity: **ERROR**
+
+### 13. Staleness Detection
+
+For articles with `status: verified` or `status: reviewed`, compute `days_since_update = today - updated`. Compare against the applicable staleness threshold from `<wiki_path>/schema.md`:
+
+1. Read `staleness_rules` from schema.md (if present)
+2. For each article's tags, check for tag-specific overrides — use the shortest (most aggressive) matching threshold
+3. If no tag match, use `default_days`
+4. If no `staleness_rules` in schema, use a default of 180 days
+
+Flag articles where `days_since_update > applicable_threshold`. Suggest: "N articles are past their staleness threshold. Run `/wiki-stale` to mark them, then review and re-verify or archive."
+
+If `staleness_rules` is not configured in schema.md, note: "No staleness_rules configured. Using default 180-day threshold. Configure in schema.md for domain-specific thresholds."
+
+Severity: **WARNING**
 
 ---
 
@@ -233,4 +270,8 @@ This command does NOT modify any files. It reads and reports only. After present
 - **Frontmatter issues**: "Edit the affected article files directly to add missing fields or correct invalid values."
 - **Bloated articles**: "Run `/wiki-reorg` to split oversized articles."
 - **Stubs**: "Flesh out the article content or merge into a related article via `/wiki-reorg`."
+
+## Size Rationale
+
+This skill exceeds the 250-line complex cap at ~275 lines. Justified: 13 structural checks with severity levels, each requiring specific detection logic and remediation guidance. Read-only, single invocation per session. Companion-extraction rejected — splitting checks across files would fragment the reviewer's mental model of the full check suite.
 

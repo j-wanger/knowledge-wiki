@@ -1,6 +1,8 @@
 # Keyword Scoring Specification
 
-Grep-based keyword-frequency scoring for wiki article pre-selection. Run by the wiki-query orchestrator in Step 1, before analyst dispatch.
+> **Fallback only (Tier 3).** Used when no `.wiki-index.db` search index exists. When a search index is available, wiki-query uses `search.py` (Tier 1/2) instead. See `search-spec.md` for the full fallback chain.
+
+Grep-based keyword-frequency scoring for wiki article pre-selection. Run by the wiki-query orchestrator in Step 1 when search index is unavailable.
 
 ## Algorithm
 

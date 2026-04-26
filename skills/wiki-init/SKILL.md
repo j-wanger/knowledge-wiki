@@ -54,6 +54,26 @@ Verify the resolved path is not already registered. If it is: "A wiki is already
 
 Verify the path does not already contain a `schema.md` (that would indicate an existing wiki that should use `/wiki-init --register` instead). If it does: "A wiki already exists at [path]. Use `/wiki-init --register [path]` to register it instead of creating a new one." Abort.
 
+**Q2.5: Domain Profile (optional)**
+> Would you like to start from a domain profile? Profiles pre-fill key topics, conventions, and staleness thresholds with sensible defaults for common domains. You can customize everything afterward.
+>
+> Available profiles (from `~/.claude/skills/knowledge-wiki/domain-profiles/`):
+> - **aml-compliance** — Anti-money laundering, sanctions, financial crime. Aggressive staleness (30d sanctions, 90d regulations).
+> - **trading** — Financial markets, execution, risk. Moderate staleness (60d market data, 90d regulations).
+> - **machine-learning** — ML engineering, MLOps, model development. Moderate staleness (90d frameworks, 60d APIs).
+> - **general** — No domain-specific defaults. Conservative 180-day staleness.
+> - **skip** — No profile, configure everything manually.
+>
+> *(default: skip)*
+
+If the user selects a profile, read the corresponding file from `~/.claude/skills/knowledge-wiki/domain-profiles/<profile>.md` and extract its `key_topics`, `conventions`, and `staleness_rules` sections. These will pre-fill later questions:
+
+- **Q6 (Key Topics):** Pre-fill defaults from the profile's `## key_topics` list. Present as: "Based on the [profile] profile, suggested topics: [list]. Adjust or accept?"
+- **Q7 (Conventions):** Pre-fill defaults from the profile's `## conventions` list. Present as: "Suggested conventions: [list]. Add more or accept?"
+- **Q9 (Staleness Thresholds):** Pre-fill defaults from the profile's `## staleness_rules` block. Present as: "Suggested thresholds: [summary]. Adjust or accept?"
+
+If the user skips profile selection, all subsequent questions use their original defaults (no pre-fill).
+
 **Q3: Domain**
 > What domain does this wiki cover?
 > *(e.g., "Python microservices architecture", "our company's hiring process", "machine learning ops")*
@@ -91,7 +111,18 @@ These become the initial hierarchy roots in schema.md.
 
 If the user provides paths, do NOT ingest them during init. Record them for a reminder to run `/wiki-ingest` after initialization.
 
-After collecting all eight answers, proceed to Step 2.
+**Q9: Staleness Thresholds (optional)**
+> How quickly does knowledge in this domain go stale? You can set a default threshold and per-tag overrides.
+> *(default: 180 days. Fast-moving domains like sanctions/regulations may need 30-90 days. Stable domains like methodologies may use 365 days.)*
+
+If the user provides thresholds, record them as `staleness_rules` in schema.md. If skipped, use the default (180 days, no overrides). This enables lifecycle-spec.md staleness detection (wiki-lint check 13). See `tier-spec.md` and `lifecycle-spec.md` for the tier and lifecycle models that staleness feeds into.
+
+Example overrides the user might specify:
+- "sanctions lists should be checked monthly" → `{tags: [sanctions], days: 30}`
+- "regulations every quarter" → `{tags: [regulations], days: 90}`
+- "methodologies are stable for a year" → `{tags: [methodologies], days: 365}`
+
+After collecting all nine answers, proceed to Step 2.
 
 ### Steps 2-6: Orchestration (Analyst -> Writer -> Reviewer pipeline)
 

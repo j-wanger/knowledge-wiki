@@ -33,6 +33,8 @@ parents: [parent-article-filename]
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 source: session | ingest | synthesize
+tier: public | private
+status: draft | reviewed | verified | stale | archived
 ---
 
 # Article Title
@@ -61,6 +63,8 @@ Main body. Keep focused on a single topic.
 | created | yes | ISO date |
 | updated | yes | ISO date of last modification |
 | source | yes | session, ingest, synthesize, or bootstrap |
+| tier | yes | `public` or `private`. See `tier-spec.md` for semantics and assignment rules. |
+| status | yes | `draft`, `reviewed`, `verified`, `stale`, or `archived`. Default: `draft`. See `lifecycle-spec.md` for state machine. |
 
 ## Category Definitions
 

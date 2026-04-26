@@ -9,6 +9,7 @@ WIKI SELECTION:
 - Auto-register: first-time setup when ./wiki/schema.md exists but is unregistered
 
 WORKFLOW: ingest/capture → absorb → query/lint → reorg/synthesize
+EPISODIC WORKFLOW: episodic entries → consolidate (5+ entries) → inbox → absorb → articles
 
 WHEN TO ACT:
 - Solved a problem or learned something? → /wiki-capture
@@ -16,7 +17,9 @@ WHEN TO ACT:
 - Inbox has 3+ items? → /wiki-absorb
 - Domain question? → /wiki-query
 - Wiki empty or thin? → /wiki-bootstrap
+- 5+ unconsolidated episodic entries? → /wiki-consolidate
 - Periodic health check? → /wiki-lint
+- Articles going stale? wiki-lint flags staleness? → /wiki-stale
 - Want to see all wikis? → /wiki-list
 - Rename a wiki? → /wiki-rename <old> <new>
 - Adopt an existing wiki directory? → /wiki-init --register <path>
@@ -30,4 +33,5 @@ RED FLAGS:
 NEVER skip absorb. Inbox entries are invisible to query/lint/reorg.
 
 SUBAGENT PATTERN: All write operations use Analyst → Writer → Reviewer.
-SINGLE-SHOT: /wiki-list (registry), /wiki-rename (registry), /wiki-lint (diagnostic), /wiki-status (dashboard).
+HYBRID: /wiki-consolidate uses Python pre-pass (consolidate.py scan/mark) + A→W→R.
+SINGLE-SHOT: /wiki-list (registry), /wiki-rename (registry), /wiki-lint (diagnostic), /wiki-stale (staleness marking), /wiki-status (dashboard).

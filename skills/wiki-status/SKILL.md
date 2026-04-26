@@ -117,6 +117,19 @@ Hierarchy:
   Max depth:    N
   Roots:        N (list root names)
 
+Tiers:
+  public:       X
+  private:      X
+
+Lifecycle:
+  draft:        X
+  reviewed:     X
+  verified:     X
+  stale:        X
+  archived:     X
+
+Episodic: N entries (N unconsolidated)
+
 Schema Health:
   Dead tags:    N
   Missing tags: N
@@ -194,6 +207,18 @@ Combine the counts of dead tags, missing tags, and hierarchy root mismatches (ro
 - **LOW**: 0-1 total issues
 - **MEDIUM**: 2-4 total issues
 - **HIGH**: 5 or more total issues
+
+### 13. Tier Breakdown
+
+Parse the `tier` field from every article's YAML frontmatter. Count articles per tier value (`public`, `private`). Articles missing the `tier` field are counted separately as "unclassified." See `tier-spec.md` for canonical tier definitions.
+
+### 14. Lifecycle Breakdown
+
+Parse the `status` field from every article's YAML frontmatter. Count articles per lifecycle state (`draft`, `reviewed`, `verified`, `stale`, `archived`). Articles missing the `status` field are counted as "unknown." See `lifecycle-spec.md` for the canonical state machine.
+
+### 15. Episodic Count
+
+Count `.md` files in `<wiki_path>/episodic/`, excluding `.gitkeep`. To determine unconsolidated count: check each entry's frontmatter for `consolidated_at` field — entries lacking this field are unconsolidated. If `<wiki_path>/episodic/` does not exist, display `Episodic: 0 entries`. See `episodic-conventions.md` for the episodic entry format.
 
 ---
 

@@ -76,7 +76,19 @@ The question may arrive as:
 - A natural-language question in a project where a wiki has been resolved via Step 0
 - A follow-up to a previous wiki-query answer
 
-After reading index.md, run keyword scoring per `~/.claude/skills/wiki-query/keyword-scoring-spec.md` to generate pre-scored candidates from article frontmatter (title, aliases, tags). If candidates are found, include a `### Pre-Scored Candidates` section in the analyst's Runtime Context. If no keywords match any article, omit the `### Pre-Scored Candidates` section entirely — do not include placeholder text.
+**Search pre-pass** — use the fallback chain from `~/.claude/skills/knowledge-wiki/search-spec.md`:
+
+1. **Index search (Tier 1/2):** If `<wiki_path>/.wiki-index.db` exists, run:
+   ```bash
+   uv run --with-requirements ~/.claude/skills/wiki-index/requirements.txt \
+     python ~/.claude/skills/wiki-index/search.py query \
+     --wiki-path <wiki_path> --query "<question>" --top 10
+   ```
+   search.py auto-selects hybrid (BM25 + vector) or BM25-only based on available dependencies. If exit code is 0, include the output as a `### Search Results` section in the analyst's Runtime Context. Skip keyword scoring.
+
+2. **Keyword fallback (Tier 3):** If no `.wiki-index.db` exists or search.py exits non-zero, fall back to keyword scoring per `~/.claude/skills/wiki-query/keyword-scoring-spec.md`. Include results as `### Pre-Scored Candidates`.
+
+If neither search nor keyword scoring returns results, omit both sections entirely — do not include placeholder text.
 
 ### Steps 2-6: Orchestration (Analyst -> Writer -> Reviewer pipeline)
 
@@ -97,8 +109,11 @@ Read `~/.claude/skills/knowledge-wiki/orchestration-template.md` for the standar
 ### Index
 {{full content of <wiki_path>/index.md}}
 
+### Search Results
+{{search.py output from Step 1 Tier 1/2, or omit section if Tier 3 fallback}}
+
 ### Pre-Scored Candidates
-{{keyword-scored article list from Step 1, or omit section if no matches}}
+{{keyword-scored article list from Step 1 Tier 3, or omit section if search was used}}
 ```
 
 **Skill-specific writer extras:** Append the user's question under `## Question` and the schema summary under `## Schema` alongside the analyst plan. Writer output uses `## Answer`, `## Sources`, and `## Gaps` sections (not the standard files-created format).

@@ -25,9 +25,13 @@ Scan the index to identify which articles are most likely to contain information
    - **decisions** -- trade-offs, rationale, context
    - **action-plans** -- step-by-step playbooks
 
+## Search Results
+
+When a `### Search Results` section is present in the Runtime Context, these are ranked results from the wiki's hybrid search index (BM25 + vector similarity, fused with RRF). They are the most accurate article matches for the query. Treat these as your primary shortlist — prioritize them strongly over index scanning. Use the full index only for supplementary discovery if the search results leave obvious gaps.
+
 ## Pre-Scored Candidates
 
-When a `### Pre-Scored Candidates` section is present in the Runtime Context, use it as a primary shortlist -- these articles matched the question's keywords in their frontmatter (title, aliases, tags). Prioritize reading these candidates before exploring the full index. Use the full index for supplementary discovery beyond the shortlist. If no Pre-Scored Candidates section is present, rely entirely on the index.
+When a `### Pre-Scored Candidates` section is present (instead of Search Results), use it as a primary shortlist — these articles matched the question's keywords in their frontmatter (title, aliases, tags). This is the fallback when no search index exists. Prioritize reading these candidates before exploring the full index. If neither section is present, rely entirely on the index.
 
 ## Prioritization
 

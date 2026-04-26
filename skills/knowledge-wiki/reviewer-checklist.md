@@ -28,6 +28,8 @@ Read each article file listed in the writer's report. Verify ALL required fields
 | created | yes | ISO date (YYYY-MM-DD) |
 | updated | yes | ISO date (YYYY-MM-DD) |
 | source | yes | One of: session, ingest, synthesize, bootstrap (skill-specific -- see reviewer-prompt.md for which value(s) are valid) |
+| tier | yes | `public` or `private` (validated in detail by Check 11) |
+| status | yes | `draft`, `reviewed`, `verified`, `stale`, or `archived` (validated in detail by Check 12) |
 
 Flag any missing field, empty required field, or invalid value.
 
@@ -102,12 +104,32 @@ Count the number of article files the writer created or modified. Compare agains
 
 This check catches the [[writer-subagent-slug-migration-anti-pattern]]: writers that rename analyst-determined slugs mid-pass without deleting the old file, producing orphan drafts.
 
+## Check 11: Tier Validity
+
+Every article must have a `tier` field in its frontmatter with a value of exactly `public` or `private`. See `tier-spec.md` for the canonical tier definitions.
+
+- Missing `tier` field: flag as ERROR
+- Invalid value (anything other than `public` or `private`): flag as ERROR
+
+Episodic entries (files in `episodic/`) are NOT articles and are exempt from this check.
+
+Severity: **ERROR**
+
+## Check 12: Status Validity
+
+Every article must have a `status` field in its frontmatter with one of: `draft`, `reviewed`, `verified`, `stale`, `archived`. See `lifecycle-spec.md` for the canonical lifecycle state machine.
+
+- Missing `status` field: flag as ERROR
+- Invalid value: flag as ERROR
+
+Severity: **ERROR**
+
 ---
 
 ## Output Format
 
 ```
-Score: N/10
+Score: N/12
 Issues:
 - [check name]: [specific issue -- what's wrong and how to fix it]
 Suggestions:
@@ -116,8 +138,8 @@ Verdict: accept | revise | reject
 ```
 
 Score-to-verdict mapping:
-- Score 9-10: Verdict must be `accept`
-- Score 6-8: Verdict must be `revise`
+- Score 10-12: Verdict must be `accept`
+- Score 6-9: Verdict must be `revise`
 - Score 1-5: Verdict must be `reject`
 
 If there are no issues, write `Issues: none`.

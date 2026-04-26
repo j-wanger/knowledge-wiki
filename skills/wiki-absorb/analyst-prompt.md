@@ -26,6 +26,7 @@ Examine each inbox entry's content and compare against existing articles. Assign
 
 Propose:
 - **Category**: one of `concepts`, `patterns`, `decisions`, `action-plans`
+- **Tier**: `public` (domain facts — verifiable, citable, shareable) or `private` (personal analysis — subjective, decisions without external validation). Classify based on content, not source. See `tier-spec.md` for semantics.
 - **Parent(s)**: which existing article(s) or hierarchy root(s) this should be a child of. Use `[]` for root articles.
 - **Tags**: drawn from the schema's Custom Tags where possible. Note any new tags that would need to be proposed.
 - **Filename**: kebab-case slug derived from the title
@@ -54,9 +55,9 @@ The orchestrator uses this value to decide whether to dispatch the Source-Credib
 - [for each inbox entry: classification rationale, proposed structure, and claim_density: N]
 
 ## Classifications
-| Inbox Entry | Classification | Target/Filename | Category | Parents | Tags | claim_density |
-|-------------|---------------|-----------------|----------|---------|------|---------------|
-| entry-name.md | NEW / UPDATE / SPLIT | proposed-filename or existing-article | category | [parents] | [tags] | N |
+| Inbox Entry | Classification | Target/Filename | Category | Tier | Parents | Tags | claim_density |
+|-------------|---------------|-----------------|----------|------|---------|------|---------------|
+| entry-name.md | NEW / UPDATE / SPLIT | proposed-filename or existing-article | category | public/private | [parents] | [tags] | N |
 
 ## Risks
 - [potential duplicates between inbox entries]

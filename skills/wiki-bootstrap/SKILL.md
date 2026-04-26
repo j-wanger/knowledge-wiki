@@ -23,6 +23,12 @@ This skill writes to the target wiki (`<wiki_path>/`) only. It does NOT write to
 
 ---
 
+## Tier and Lifecycle
+
+Bootstrap articles are always `tier: public` and `status: draft`. Bootstrap produces domain facts from online research — these are public by definition but need human review before promotion to `reviewed` or `verified`. See `tier-spec.md` for tier definitions and `lifecycle-spec.md` for the lifecycle state machine.
+
+---
+
 ## Pre-checks
 
 Step 0 below (in the Orchestration Flow) runs FIRST and resolves `wiki_path` — the absolute path to the target wiki. These pre-checks run after Step 0 and use that resolved path.

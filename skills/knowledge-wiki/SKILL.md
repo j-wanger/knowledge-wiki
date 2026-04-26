@@ -46,6 +46,7 @@ These thoughts mean STOP -- you are rationalizing skipping wiki discipline:
 
 ```
 init (once) -> ingest/capture (ongoing) -> absorb (periodic) -> lint (health check) -> reorg (structural) -> synthesize (creative)
+episodic entries: consolidate (5+ entries) -> inbox -> absorb -> articles
 ```
 
 **Never skip absorb.** Raw inbox entries are invisible to query, lint, reorg, and synthesize. Until entries are absorbed into articles, they do not exist as far as the wiki is concerned.
@@ -61,6 +62,7 @@ These operations dispatch 3 sequential subagents via the Agent tool:
 - **/wiki-capture** -- Draft, refine, review
 - **/wiki-bootstrap** -- Research domain, generate foundational articles, review quality
 - **/wiki-absorb** -- Analyze inbox, write articles, review quality
+- **/wiki-consolidate** -- Scan episodic entries, dedup via search index, extract facts into inbox
 - **/wiki-query** -- Search, synthesize answer, verify accuracy
 - **/wiki-reorg** -- Analyze structure, restructure, review changes
 - **/wiki-synthesize** -- Identify patterns, draft insights, review
@@ -71,9 +73,11 @@ Max 2 review rounds before escalating to the user. Do not loop indefinitely.
 
 These run directly without subagent dispatch:
 
+- **/wiki-index** -- Build hybrid search index (FTS5 + sqlite-vec vectors) for a wiki
 - **/wiki-list** -- Show all registered wikis
 - **/wiki-rename** -- Rename a wiki in the registry
 - **/wiki-lint** -- Read-only structural health audit
+- **/wiki-stale** -- Detect and mark stale articles past their staleness threshold
 - **/wiki-status** -- Read-only dashboard and stats
 
 ## Command Reference
@@ -91,8 +95,11 @@ Route user intent to the correct wiki skill:
 | "I just learned something" / "capture this" | /wiki-capture |
 | "Process the inbox" / "absorb" | /wiki-absorb |
 | "What does the wiki say about X" | /wiki-query |
+| "Build search index" / "index the wiki" | /wiki-index |
 | "Check wiki health" / "audit" | /wiki-lint |
 | "Reorganize" / "restructure" | /wiki-reorg |
+| "Process episodic entries" / "consolidate" | /wiki-consolidate |
+| "Mark stale articles" / "staleness check" | /wiki-stale |
 | "What patterns are emerging?" | /wiki-synthesize |
 | "Wiki stats" / "dashboard" | /wiki-status |
 
