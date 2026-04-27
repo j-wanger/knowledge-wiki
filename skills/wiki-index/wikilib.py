@@ -22,6 +22,11 @@ def _serialize_f32(vec: list[float]) -> bytes:
     return struct.pack(f"{len(vec)}f", *vec)
 
 
+def body_text(content: str) -> str:
+    m = re.match(r"^---\n.*?\n---\n?", content, re.DOTALL)
+    return content[m.end():].strip() if m else content.strip()
+
+
 def parse_frontmatter(text: str) -> dict[str, str]:
     m = re.match(r"^---\n(.*?)\n---\n?", text, re.DOTALL)
     if not m:

@@ -87,7 +87,7 @@ Set the `source` field based on the inbox entry's `source_type` frontmatter:
 - `source_type: paste` maps to `source: ingest`
 - `source_type: session` maps to `source: session`
 
-For synthesized articles, use `source: synthesize`. For articles created by wiki-bootstrap, use `source: bootstrap` (generated from domain knowledge to seed the wiki — distinct from `ingest` which is imported from user-provided files/URLs).
+For synthesized articles, use `source: synthesize`. For articles created by wiki-bootstrap, use `source: bootstrap` (generated from domain knowledge to seed the wiki — distinct from `ingest` which is imported from user-provided files/URLs). For articles created from consolidated episodic entries (via the `/wiki-consolidate` → `/wiki-absorb` pipeline), use `source: consolidated`.
 
 ## Linking Rules
 

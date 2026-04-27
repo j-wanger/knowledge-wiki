@@ -32,3 +32,12 @@ staleness_rules:
 ```
 
 **Rationale:** Sanctions lists change monthly (OFAC, EU, UN). Regulations update quarterly (enforcement actions, guidance). Typologies are stable patterns that evolve slowly.
+
+## consolidation
+
+```yaml
+consolidation:
+  dedup_cosine_threshold: 0.80
+```
+
+**Rationale:** Regulatory language is formulaic — compliance articles on different topics often share boilerplate phrasing, inflating cosine similarity. A lower threshold (0.80 vs 0.85 default) avoids false-positive dedup of genuinely distinct regulatory entries.

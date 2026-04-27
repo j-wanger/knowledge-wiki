@@ -31,3 +31,12 @@ staleness_rules:
 ```
 
 **Rationale:** Market data feeds and exchange rules change with each trading cycle. Regulatory reporting requirements shift quarterly. Statistical theory and methodology are long-lived.
+
+## consolidation
+
+```yaml
+consolidation:
+  dedup_cosine_threshold: 0.85
+```
+
+**Rationale:** Default threshold. Trading content has moderate semantic diversity — market microstructure topics are distinct enough that the standard 0.85 threshold correctly separates them.

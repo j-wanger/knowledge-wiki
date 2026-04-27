@@ -31,3 +31,12 @@ staleness_rules:
 ```
 
 **Rationale:** ML frameworks release breaking changes quarterly. Cloud API pricing and features shift frequently. Mathematical foundations (linear algebra, optimization theory) are evergreen.
+
+## consolidation
+
+```yaml
+consolidation:
+  dedup_cosine_threshold: 0.90
+```
+
+**Rationale:** ML content is semantically diverse — a PyTorch training article and a TensorFlow serving article may share ML vocabulary but cover genuinely different topics. A higher threshold (0.90) prevents false-positive dedup of topically distinct entries that happen to share domain terminology.

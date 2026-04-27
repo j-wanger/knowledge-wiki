@@ -57,6 +57,12 @@ Read `<wiki_path>/schema.md` (domain, tags, hierarchy roots, conventions).
 
 **Ingest mode (--file, --url, or --paste):**
 - `--file <path>`: Expand globs, read each file. If a source exceeds 200 lines, include first 200 and note truncation.
+  - **Binary format pre-processing:** Before the analyst receives file content, check the file extension against supported conversion formats (.pdf, .docx, .pptx, .xlsx, .html, .htm, .png, .jpg, .tiff, .epub). If conversion is needed:
+    1. Run via Bash: `uv run --with-requirements ~/.claude/skills/wiki-index/requirements-convert.txt python ~/.claude/skills/wiki-index/convert.py --file <path>`. If `schema.md` specifies `conversion.preferred_engine`, pass `--engine <engine>`. Output goes to stdout by default.
+    2. Capture the markdown output and pass it to the analyst as the source material.
+    3. If conversion fails, report the error with install suggestions: "Conversion failed. Try: `pip install kreuzberg>=4.9` (or `pip install docling` for better table support)."
+    4. For .md, .txt, and .rst files: read directly without conversion (current behavior).
+  - See `~/.claude/skills/knowledge-wiki/conversion-spec.md` for the tiered engine architecture and format matrix.
 - `--url <url>`: Fetch content using WebFetch and extract meaningful text.
 - `--paste`: Prompt user for inline content if not already provided.
 - Multiple sources in a single invocation are fine — process each separately.

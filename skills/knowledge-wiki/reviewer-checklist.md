@@ -27,7 +27,7 @@ Read each article file listed in the writer's report. Verify ALL required fields
 | parents | yes | Array of filenames (can be empty [] for roots) |
 | created | yes | ISO date (YYYY-MM-DD) |
 | updated | yes | ISO date (YYYY-MM-DD) |
-| source | yes | One of: session, ingest, synthesize, bootstrap (skill-specific -- see reviewer-prompt.md for which value(s) are valid) |
+| source | yes | One of: session, ingest, synthesize, bootstrap, consolidated (skill-specific -- see reviewer-prompt.md for which value(s) are valid) |
 | tier | yes | `public` or `private` (validated in detail by Check 11) |
 | status | yes | `draft`, `reviewed`, `verified`, `stale`, or `archived` (validated in detail by Check 12) |
 

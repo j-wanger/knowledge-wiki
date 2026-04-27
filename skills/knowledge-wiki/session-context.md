@@ -8,7 +8,7 @@ WIKI SELECTION:
 - Inference: used when multiple wikis match CWD or conversation mentions a wiki name
 - Auto-register: first-time setup when ./wiki/schema.md exists but is unregistered
 
-WORKFLOW: add → absorb → query/lint → reorg/synthesize
+WORKFLOW: add → absorb → query/health → reorg
 EPISODIC WORKFLOW: episodic entries → consolidate (5+ entries) → inbox → absorb → articles
 
 WHEN TO ACT:
@@ -30,7 +30,7 @@ RED FLAGS:
 - "The wiki already covers this" → /wiki-query first — you might be wrong.
 - "The wiki needs more content first" → /wiki-bootstrap solves this.
 
-NEVER skip absorb. Inbox entries are invisible to query/lint/reorg.
+NEVER skip absorb. Inbox entries are invisible to query/health/reorg.
 
 SUBAGENT PATTERN: All write operations use Analyst → Writer → Reviewer.
 HYBRID: /wiki-consolidate uses Python pre-pass (consolidate.py scan/mark) + A→W→R.

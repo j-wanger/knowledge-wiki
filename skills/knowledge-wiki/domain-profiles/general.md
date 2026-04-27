@@ -18,3 +18,12 @@ staleness_rules:
 ```
 
 **Rationale:** The 180-day default is a reasonable middle ground. Users can add tag-specific overrides later via schema.md as domain patterns emerge.
+
+## consolidation
+
+```yaml
+consolidation:
+  dedup_cosine_threshold: 0.85
+```
+
+**Rationale:** Default threshold. No domain-specific adjustment needed for general-purpose wikis.

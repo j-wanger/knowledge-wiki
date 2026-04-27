@@ -48,6 +48,7 @@ You are analyzing source material for knowledge extraction:
 - Preserves domain-relevant knowledge faithfully.
 - Separates distinct topics into separate entries.
 - Flags ambiguities rather than silently dropping unclear content.
+- **Converted documents:** When source material was converted from a binary format (PDF, DOCX, etc.), the markdown may contain conversion artifacts — garbled tables, missing headings, or OCR errors. Flag these as Risks rather than silently cleaning them up. The user should know if the conversion was imperfect.
 
 ## Output Format
 

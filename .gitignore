@@ -1,4 +1,6 @@
 .wiki-index.db
 .dev-wiki/
 .claude/
-__pycache__/
+**/__pycache__/
+.pytest_cache/
+.coverage

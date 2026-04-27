@@ -171,6 +171,17 @@ After the writer has successfully scaffolded the wiki and the reviewer has appro
           "last_used": "<today's date in YYYY-MM-DD>"
         }
 
+   If a domain profile was selected in Q2.5 and it includes a `## consolidation` section, add the consolidation config to the entry:
+
+        {
+          ...
+          "consolidation": {
+            "dedup_cosine_threshold": <value from profile>
+          }
+        }
+
+   If no profile was selected or the profile has no consolidation section, omit the field (consolidate.py falls back to 0.85 default).
+
 3. Append the new entry to the `wikis` array.
 4. Use the atomic write pattern:
    - Write the full modified registry to `~/.claude/wikis.json.tmp` using the Write tool

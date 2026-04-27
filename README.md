@@ -91,8 +91,9 @@ Register multiple wikis in `~/.claude/wikis.json`. Each wiki is scoped to a proj
 ## Package contents
 
 - 11 skill directories (1 router + 10 sub-skills)
-- ~62 files, ~6,100 lines
+- ~66 files, ~6,500 lines
 - Hybrid search index (FTS5 + vector) via wiki-index — requires Python 3.11+, uv, fastembed, sqlite-vec, xxhash
+- Document-to-markdown conversion via convert.py — tiered engines (Kreuzberg, Docling, Pandoc) for PDF, DOCX, PPTX, XLSX, images
 - Consolidation pipeline via wiki-consolidate — converts episodic entries into inbox entries with dedup
 - Three-tier content model (public/private/episodic) with five-state article lifecycle
 

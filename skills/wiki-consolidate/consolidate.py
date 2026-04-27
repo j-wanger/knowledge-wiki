@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 
 try:
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "wiki-index"))
-    from wikilib import EMBED_MODEL, EMBED_DIM, _HAS_VECTORS, _serialize_f32, parse_frontmatter
+    from wikilib import EMBED_MODEL, EMBED_DIM, _HAS_VECTORS, _serialize_f32, parse_frontmatter, body_text
 except ImportError:
     EMBED_MODEL = "nomic-ai/nomic-embed-text-v1.5"
     EMBED_DIM = 384
@@ -33,6 +33,9 @@ except ImportError:
             val = val.strip().strip("\"'")
             meta[key] = val
         return meta
+    def body_text(content: str) -> str:
+        m = re.match(r"^---\n.*?\n---\n?", content, re.DOTALL)
+        return content[m.end():].strip() if m else content.strip()
     try:
         from fastembed import TextEmbedding
         import sqlite_vec
@@ -58,11 +61,6 @@ def parse_tags(text: str) -> list[str]:
         if key.strip() == "tags":
             return [t.strip().strip("\"'") for t in re.findall(r"[\w-]+", val)]
     return []
-
-
-def body_text(content: str) -> str:
-    m = re.match(r"^---\n.*?\n---\n?", content, re.DOTALL)
-    return content[m.end() :].strip() if m else content.strip()
 
 
 def read_consolidated(wiki_path: str) -> set[str]:
