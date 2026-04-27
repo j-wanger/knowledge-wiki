@@ -9,8 +9,8 @@ import shutil
 import pytest
 
 from conftest import build_test_index
+from wikilib import body_text
 from consolidate import (
-    body_text,
     crawl_episodic,
     do_mark,
     do_scan,

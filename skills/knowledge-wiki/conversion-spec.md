@@ -15,7 +15,7 @@ Convert binary documents (PDF, DOCX, PPTX, XLSX, images) to markdown for wiki in
 | 2 (accuracy) | Docling | Apache 2.0 | `pip install docling` (Mac: `docling[mlx]`) | Best tables/layout, MLX accel | Heavy (~2GB models) |
 | 3 (fallback) | Pandoc | GPL-2 | System install (`brew`/`apt`/`winget`) | Zero Python deps, DOCX reliable | DOCX only |
 
-Engine selection: explicit `--engine` flag > `schema.md` `conversion.preferred_engine` > auto-detect (try 1→2→3).
+Engine selection: explicit `--engine` flag > auto-detect (try 1→2→3). Per-wiki `schema.md` `conversion.preferred_engine` is read by the skill layer (wiki-add SKILL.md) and passed as `--engine`.
 
 ## Supported Format Matrix
 
@@ -33,7 +33,7 @@ Engine selection: explicit `--engine` flag > `schema.md` `conversion.preferred_e
 ## CLI Interface
 
 ```
-convert.py --file <path> [--engine kreuzberg|docling|pandoc] [--wiki-path <path>]
+convert.py --file <path> [--engine kreuzberg|docling|pandoc]
 convert.py --formats          # list supported formats
 convert.py --engines          # show installed engines
 ```

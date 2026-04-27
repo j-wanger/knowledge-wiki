@@ -12,6 +12,8 @@ import struct
 import sys
 from datetime import datetime, timezone
 
+# Import shared utilities from wikilib (in wiki-index/). Falls back to inline
+# definitions for standalone deployment where wikilib is not on sys.path.
 try:
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "wiki-index"))
     from wikilib import EMBED_MODEL, EMBED_DIM, _HAS_VECTORS, _serialize_f32, parse_frontmatter, body_text

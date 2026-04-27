@@ -97,6 +97,22 @@ Register multiple wikis in `~/.claude/wikis.json`. Each wiki is scoped to a proj
 - Consolidation pipeline via wiki-consolidate — converts episodic entries into inbox entries with dedup
 - Three-tier content model (public/private/episodic) with five-state article lifecycle
 
+## Development
+
+```bash
+# Install dev dependencies (uv.lock is committed for reproducibility)
+uv sync --group dev
+
+# Run tests
+uv run pytest
+
+# Run tests with coverage
+uv run pytest --cov
+
+# Run with optional vector dependencies
+uv sync --group dev --group vectors
+```
+
 ## Related
 
 - [dev-wiki](https://github.com/j-wanger/dev-wiki) — Project lifecycle management (phases, tasks, reviews)

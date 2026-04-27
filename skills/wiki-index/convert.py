@@ -112,7 +112,7 @@ def _convert_pandoc(path: str, ext: str) -> str:
     return result.stdout
 
 
-def convert_file(path: str, engine: str | None = None, wiki_path: str | None = None) -> str:
+def convert_file(path: str, engine: str | None = None) -> str:
     if not os.path.exists(path):
         raise FileNotFoundError(f"File not found: {path}")
 
@@ -176,7 +176,6 @@ def main():
     group.add_argument("--engines", action="store_true", help="Show installed engines")
     parser.add_argument("--engine", choices=["kreuzberg", "docling", "pandoc"],
                         help="Force a specific engine")
-    parser.add_argument("--wiki-path", help="Wiki path for per-wiki engine preference")
 
     args = parser.parse_args()
 
@@ -188,7 +187,7 @@ def main():
         return
 
     try:
-        result = convert_file(args.file, engine=args.engine, wiki_path=args.wiki_path)
+        result = convert_file(args.file, engine=args.engine)
         print(result)
     except FileNotFoundError as e:
         print(f"Error: {e}", file=sys.stderr)
